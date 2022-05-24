@@ -1,6 +1,11 @@
 const app = require("./app");
-const port = 3000;
+const db = require("./db");
 
-const server = app.listen(port, () => {
+db.authenticate().then(() => {
+  console.log("Connected to the PostgreSQL cloud");
+});
+
+const port = 3000;
+app.listen(port, () => {
   console.log(`App is running on port ${port}`);
 });

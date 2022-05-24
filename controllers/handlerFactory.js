@@ -82,3 +82,4 @@ exports.deleteOne = (Model) => async (req, res, next) => {
     return res.status(500).json({ error: "Something went wrong..." });
   }
 };
+

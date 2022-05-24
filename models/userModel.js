@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../db");
+const bcrypt = require("bcryptjs");
 
 const User = sequelize.define(
   "User",
@@ -38,9 +39,15 @@ const User = sequelize.define(
   { tableName: "users" }
 );
 
-User.addHook("beforeCreate", () => {});
+User.beforeCreate(async (user, options) => {
+  const hashedPassword = await bcrypt.hash(user.password, 12);
+  user.password = hashedPassword;
+  user.passwordConfirm = "";
+});
 
-User.prototype.checkPassword = () => {};
+User.prototype.correctPassword = async (candidatePassword, password) => {
+  return await bcrypt.compare(candidatePassword, password);
+};
 
 User.sync();
 

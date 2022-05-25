@@ -1,4 +1,4 @@
-const User = require("../models/userModel");
+const { User } = require("../models");
 const handlerFactory = require("./handlerFactory");
 
 exports.getAllUsers = handlerFactory.getAll(User);

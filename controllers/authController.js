@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const User = require("../models/userModel");
+const { User } = require("../models");
 
 // **********************
 // Create JWT for an user
@@ -83,3 +83,5 @@ exports.login = async (req, res, next) => {
     res.status(500).json({ message: "Something went wrong..." });
   }
 };
+
+exports.protect = async (req, res, next) => {};

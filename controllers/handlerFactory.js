@@ -35,7 +35,9 @@ exports.createOne = (Model) => async (req, res, next) => {
 
 exports.getOne = (Model) => async (req, res, next) => {
   try {
-    const doc = await Model.findOne({ where: { uuid: req.params.id } });
+    const doc = await Model.findOne({
+      where: { uuid: req.params.id },
+    });
 
     return res.json({
       status: "success",
@@ -82,4 +84,3 @@ exports.deleteOne = (Model) => async (req, res, next) => {
     return res.status(500).json({ error: "Something went wrong..." });
   }
 };
-

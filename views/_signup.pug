@@ -1,0 +1,18 @@
+extends overview
+
+block content 
+
+
+    h2 Signup: 
+        form#post
+            
+            label.form__label(for='message') Your email: 
+            input#email-reg(type='text', required)  
+            p ____
+            label.form__label(for='message') Your password: 
+            input#password-reg(type='text', required)
+            p ____
+            label.form__label(for='message') Confirm password: 
+            input#password2-reg(type='text', required)   
+            p ____ 
+            button.btn.btn--green Signup

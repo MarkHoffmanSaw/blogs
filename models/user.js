@@ -5,17 +5,17 @@ const bcrypt = require("bcryptjs");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate({ Blog }) {
-      // this.hasMany(Blog, { foreignKey: "userId", as: "blogs" });
+      this.hasMany(Blog, { foreignKey: "userId", as: "blogs" });
     }
     // Hide the rows
-    toJSON() {
-      return {
-        ...this.get(),
-        id: undefined,
-        password: undefined,
-        passwordConfirm: undefined,
-      };
-    }
+    // toJSON() {
+    //   return {
+    //     ...this.get(),
+    //     id: undefined,
+    //     password: undefined,
+    //     passwordConfirm: undefined,
+    //   };
+    // }
   }
   User.init(
     {
@@ -26,6 +26,10 @@ module.exports = (sequelize, DataTypes) => {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          notNull: { msg: "User must have a name" },
+          notEmpty: { msg: "User cannot have an empty name" },
+        },
       },
       email: {
         type: DataTypes.STRING,

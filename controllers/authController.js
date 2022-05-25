@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const { promisify } = require("util");
 const { User } = require("../models");
 
 // **********************
@@ -84,4 +85,43 @@ exports.login = async (req, res, next) => {
   }
 };
 
-exports.protect = async (req, res, next) => {};
+// ****************
+// Only auth. users
+// ****************
+exports.protect = async (req, res, next) => {
+  try {
+    let token;
+
+    // Get JWT from headers/cookies
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.startsWith("Bearer")
+    ) {
+      token = req.headers.authorization.split(" ")[1];
+    } else if (req.cookies?.jwt) {
+      token = req.cookies.jwt;
+    }
+
+    // Check JWT by existing
+    if (!token)
+      return next(new Error("You haven't got the access. Please, log in"));
+
+    // Verify JWT: return { id, iat, exp }
+    const decoded = await promisify(jwt.verify)(
+      token,
+      process.env.JWT_SECRET_KEY
+    );
+
+    // Check the user by JWT
+    const currentUser = await User.findOne({ where: { uuid: decoded.id } });
+    if (!currentUser) return next(new Error("Invalid token for the user"));
+
+    // Add the user into request and go to next
+    req.user = currentUser;
+    res.locals.user = currentUser; // for templates
+    next();
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong..." });
+  }
+};

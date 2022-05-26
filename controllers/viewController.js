@@ -1,6 +1,6 @@
 const { Blog, User } = require("../models");
 
-exports.getOverview = async (req, res, next) => {
+exports.getBlogs = async (req, res, next) => {
   const blogs = await Blog.findAll({ include: "user" });
 
   res.status(200).render("_blogs", {
